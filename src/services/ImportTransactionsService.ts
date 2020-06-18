@@ -6,6 +6,7 @@ import Transaction from '../models/Transaction';
 import Category from '../models/Category';
 
 import TransactionsRepository from '../repositories/TransactionsRepository';
+import AppError from '../errors/AppError';
 
 interface CSVTransaction {
   title: string;
@@ -16,6 +17,9 @@ interface CSVTransaction {
 
 class ImportTransactionsService {
   async execute(filePath: string): Promise<Transaction[]> {
+    if (!filePath) {
+      throw new AppError('ASd');
+    }
     const contactsReadStream = fs.createReadStream(filePath);
 
     const transactionRepository = getCustomRepository(TransactionsRepository);

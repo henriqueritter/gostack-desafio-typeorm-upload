@@ -23,6 +23,17 @@ class CreateTransactionService {
     const transactionRepository = getCustomRepository(TransactionRepository);
     const categoryRepository = getRepository(Category);
 
+    // verifica se os campos estao preenchidos
+    if (!title || !value || !type) {
+      throw new AppError('Fields cannot be blank');
+    }
+
+    if (type !== 'income') {
+      if (type !== 'outcome') {
+        throw new AppError(`Field 'type' must be income or outcome`);
+      }
+    }
+
     const { total } = await transactionRepository.getBalance();
     if (type === 'outcome' && total < value) {
       throw new AppError('Not enough balance in account');
